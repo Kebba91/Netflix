@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import netflixLogo from '../assets/netflix-logo.svg';
 import HeroBanner from '../components/HeroBanner';
+
 import TrendingNow from '../components/TrendingNow';
 import { movies } from './data/movies';
 
@@ -14,7 +16,9 @@ export default function Home() {
   return (
     <div className="bg-black min-h-screen">
       {/* Top Navigation */}
-      <div className="flex justify-end px-4 py-4">
+      <div className="flex justify-between item-center px-4 py-4">
+        {/* Netflix Logo */}
+        <img src={netflixLogo} alt="Netflix Logo" className="h-12" />
         <button
           onClick={handleSignIn}
           className="text-white bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition"
