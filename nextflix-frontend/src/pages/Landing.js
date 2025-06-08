@@ -104,7 +104,7 @@ export default function Landing() {
 
   return (
     <div
-      className="relative min-h-screen flex flex-col"
+      className="relative min-h-screen flex flex-col bg-black"
       style={{
         backgroundImage: 'url(https://assets.nflxext.com/ffe/siteui/vlv3/7e1e5c7e-2b7d-4b3e-8e7e-2c2e7e7e7e7e/7e1e5c7e-2b7d-4b3e-8e7e-2c2e7e7e7e7e_PL-en-20230731-popsignuptwoweeks-perspective_alpha_website_large.jpg)',
         backgroundSize: 'cover',
@@ -123,7 +123,6 @@ export default function Landing() {
       <header className="relative z-30 flex justify-between items-center px-8 py-6">
         <span className="text-3xl font-bold text-red-600">NETFLIX</span>
         <div className="flex items-center gap-4">
-          {/* Language selector (optional) */}
           <select
             className="bg-transparent border border-gray-500 text-white px-2 py-1 rounded text-sm"
             defaultValue="en"
@@ -150,32 +149,34 @@ export default function Landing() {
         </div>
       </header>
       <main className="relative z-30 flex flex-col items-center justify-center flex-1 text-center px-4 min-h-[70vh]">
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
-          Unlimited movies, TV shows, and more
-        </h1>
-        <h2 className="text-2xl text-white mb-4">Starts at 33 zł. Cancel anytime.</h2>
-        <p className="text-white mb-6">
-          Ready to watch? Enter your email to create or restart your membership.
-        </p>
-        <form
-          onSubmit={handleGetStarted}
-          className="flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xl mb-12"
-        >
-          <input
-            type="email"
-            placeholder="Email address"
-            className="px-4 py-3 rounded w-full md:w-2/3 bg-gray-900 bg-opacity-80 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-600"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-          <button
-            type="submit"
-            className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded font-semibold text-lg"
+        <div className="w-full max-w-5xl mx-auto">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
+            Unlimited movies, TV shows, and more
+          </h1>
+          <h2 className="text-2xl text-white mb-4">Starts at 33 zł. Cancel anytime.</h2>
+          <p className="text-white mb-6">
+            Ready to watch? Enter your email to create or restart your membership.
+          </p>
+          <form
+            onSubmit={handleGetStarted}
+            className="flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xl mx-auto mb-12"
           >
-            Get Started &gt;
-          </button>
-        </form>
+            <input
+              type="email"
+              placeholder="Email address"
+              className="px-4 py-3 rounded w-full md:w-2/3 bg-gray-900 bg-opacity-80 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-600"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+            <button
+              type="submit"
+              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded font-semibold text-lg"
+            >
+              Get Started &gt;
+            </button>
+          </form>
+        </div>
 
         {/* Trending Now */}
         <section className="w-full max-w-5xl mx-auto mb-12">
@@ -237,7 +238,18 @@ export default function Landing() {
           </div>
         </section>
       </main>
-      {/* You can add a footer here if you want */}
+      {/* Footer */}
+      <footer className="relative z-30 w-full bg-black bg-opacity-80 text-gray-400 text-sm py-8 mt-auto">
+        <div className="max-w-5xl mx-auto px-4">
+          <p className="mb-4">Questions? Call 1-800-000-0000</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="#" className="hover:underline">FAQ</a>
+            <a href="#" className="hover:underline">Help Center</a>
+            <a href="#" className="hover:underline">Terms of Use</a>
+            <a href="#" className="hover:underline">Privacy</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
