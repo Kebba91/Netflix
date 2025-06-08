@@ -18,12 +18,18 @@ Movie Details Page with Video player
 Watchlist
 Admin Add Movie Page 
 
+DevOps & Deployment
+Dockerized backend & frontend
+CI/CD pipelines(Github, Argocd)
+Deploye to cloud (AWS)
+Logging and momitoring(Prometheus Grafana, Loki)
 
-Tech  Stack
-
-Axios for API calls
-React Router v6
-Tailwind CSS or basic CSS
-Video.js for playing videos
-
-
+Tech Stack:
+Frontend               React + Tailwind CSS/Material UI
+Backend                Nodejs + Express
+Auth                   JWT + bcrypt / Passport.js
+Database               MongoDB 
+Video Storage          AWS S3 
+Streaming              HLS (.m3u8) with Video.js
+Payments               Stripe / Paypal
+Hosting                AWS EKS
