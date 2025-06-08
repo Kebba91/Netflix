@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 const trending = [
@@ -82,11 +82,24 @@ const faqs = [
 export default function Landing() {
   const [email, setEmail] = useState('');
   const [openFaq, setOpenFaq] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    setIsLoggedIn(!!user);
+  }, []);
 
   const handleGetStarted = (e) => {
     e.preventDefault();
     navigate('/register');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    navigate('/');
   };
 
   return (
@@ -98,14 +111,45 @@ export default function Landing() {
         backgroundPosition: 'center',
       }}
     >
+      {/* Black overlay */}
       <div className="absolute inset-0 bg-black opacity-80"></div>
-      <header className="relative z-10 flex justify-between items-center px-8 py-6">
+      {/* Red glow at the bottom */}
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 w-full h-40 z-20"
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(229,9,20,0.6) 0%, rgba(0,0,0,0) 80%)',
+        }}
+      ></div>
+      <header className="relative z-30 flex justify-between items-center px-8 py-6">
         <span className="text-3xl font-bold text-red-600">NETFLIX</span>
-        <div>
-          <Link to="/login" className="bg-red-600 text-white px-4 py-2 rounded font-semibold hover:bg-red-700">Sign In</Link>
+        <div className="flex items-center gap-4">
+          {/* Language selector (optional) */}
+          <select
+            className="bg-transparent border border-gray-500 text-white px-2 py-1 rounded text-sm"
+            defaultValue="en"
+            aria-label="Select language"
+          >
+            <option value="en">English</option>
+            <option value="pl">Polski</option>
+          </select>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 text-white px-4 py-2 rounded font-semibold hover:bg-red-700 uppercase text-sm tracking-wider"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-red-600 text-white px-4 py-2 rounded font-semibold hover:bg-red-700 uppercase text-sm tracking-wider"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
       </header>
-      <main className="relative z-10 flex flex-col items-center justify-center flex-1 text-center px-4">
+      <main className="relative z-30 flex flex-col items-center justify-center flex-1 text-center px-4 min-h-[70vh]">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
           Unlimited movies, TV shows, and more
         </h1>
@@ -113,11 +157,14 @@ export default function Landing() {
         <p className="text-white mb-6">
           Ready to watch? Enter your email to create or restart your membership.
         </p>
-        <form onSubmit={handleGetStarted} className="flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xl mb-12">
+        <form
+          onSubmit={handleGetStarted}
+          className="flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xl mb-12"
+        >
           <input
             type="email"
             placeholder="Email address"
-            className="px-4 py-3 rounded w-full md:w-2/3 bg-gray-900 bg-opacity-80 text-white"
+            className="px-4 py-3 rounded w-full md:w-2/3 bg-gray-900 bg-opacity-80 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-600"
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
@@ -135,13 +182,15 @@ export default function Landing() {
           <h2 className="text-2xl text-white font-bold mb-4 text-left">Trending Now</h2>
           <div className="flex gap-6 overflow-x-auto pb-4">
             {trending.map((movie, idx) => (
-              <div key={movie.id} className="flex-shrink-0 w-40 relative">
+              <div key={movie.id} className="flex-shrink-0 w-40 relative group">
                 <img
                   src={movie.image}
                   alt={movie.title}
-                  className="rounded-lg shadow-lg w-full h-56 object-cover"
+                  className="rounded-lg shadow-lg w-full h-56 object-cover group-hover:scale-105 transition-transform"
                 />
-                <span className="absolute top-2 left-2 bg-black bg-opacity-70 text-white text-2xl font-bold px-2 rounded">{idx + 1}</span>
+                <span className="absolute top-2 left-2 bg-black bg-opacity-70 text-white text-2xl font-bold px-2 rounded">
+                  {idx + 1}
+                </span>
                 <h3 className="text-white mt-2 text-base font-semibold">{movie.title}</h3>
               </div>
             ))}
@@ -153,7 +202,10 @@ export default function Landing() {
           <h2 className="text-2xl text-white font-bold mb-4 text-left">More Reasons to Join</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {reasons.map(reason => (
-              <div key={reason.title} className="bg-[#181824] rounded-lg p-6 text-left text-white flex flex-col items-start">
+              <div
+                key={reason.title}
+                className="bg-[#181824] rounded-lg p-6 text-left text-white flex flex-col items-start shadow-md"
+              >
                 <div className="text-3xl mb-2">{reason.icon}</div>
                 <h4 className="font-bold mb-2">{reason.title}</h4>
                 <p className="text-sm">{reason.desc}</p>
