@@ -5,9 +5,9 @@ const movies = [
   {
     id: 1,
     title: 'Stranger Things',
-    image: 'https://m.media-amazon.com/images/I/81l3rZK4lnL._AC_SY679_.jpg',
+    image: 'https://occ-0-58-64.1.nflxso.net/art/8e7c2/8e7c2b8e7c2b8e7c2b8e7c2b8e7c2b8e7c2b8e7c2b8e7c2b8e7c2b8e7c2b.jpg',
     description: 'A love letter to the 80s classics that captivated a generation.',
-    banner: 'https://m.media-amazon.com/images/I/81l3rZK4lnL._AC_SY679_.jpg',
+    banner: 'https://static1.srcdn.com/wordpress/wp-content/uploads/2022/05/Stranger-Things-Season-4-Poster.jpg',
   },
   {
     id: 2,
@@ -16,27 +16,7 @@ const movies = [
     description: 'A criminal mastermind who goes by "The Professor" has a plan.',
     banner: 'https://m.media-amazon.com/images/I/81p+xe8cbnL._AC_SY679_.jpg',
   },
-  {
-    id: 3,
-    title: 'The Witcher',
-    image: 'https://m.media-amazon.com/images/I/81dQwQlmAXL._AC_SY679_.jpg',
-    description: 'Geralt of Rivia, a mutated monster-hunter for hire, journeys toward his destiny.',
-    banner: 'https://m.media-amazon.com/images/I/81dQwQlmAXL._AC_SY679_.jpg',
-  },
-  {
-    id: 4,
-    title: 'Squid Game',
-    image: 'https://m.media-amazon.com/images/I/91z5KuonXrL._AC_SY679_.jpg',
-    description: 'Hundreds of cash-strapped players accept a strange invitation to compete in deadly games.',
-    banner: 'https://m.media-amazon.com/images/I/91z5KuonXrL._AC_SY679_.jpg',
-  },
-  {
-    id: 5,
-    title: 'Breaking Bad',
-    image: 'https://m.media-amazon.com/images/I/81l3rZK4lnL._AC_SY679_.jpg',
-    description: 'A high school chemistry teacher turned methamphetamine producer.',
-    banner: 'https://m.media-amazon.com/images/I/81l3rZK4lnL._AC_SY679_.jpg',
-  },
+  // Add more movies as needed
 ];
 
 export default function Home() {
@@ -69,22 +49,23 @@ export default function Home() {
 
       {/* Movie Rows */}
       <div className="p-8">
-        <h2 className="text-2xl text-white font-bold mb-4">Popular on Netflix</h2>
-        <div className="flex gap-6 overflow-x-auto pb-4">
-          {movies.map(movie => (
-            <Link
-              key={movie.id}
-              to={`/movie/${movie.id}`}
-              className="flex-shrink-0 w-48"
-            >
-              <img
-                src={movie.image}
-                alt={movie.title}
-                className="rounded-lg shadow-lg hover:scale-105 transition-transform duration-200"
-              />
-              <h3 className="text-white mt-2 text-lg font-semibold">{movie.title}</h3>
-            </Link>
-          ))}
+  <h2 className="text-2xl text-white font-bold mb-4">Popular on Netflix</h2>
+  <div className="flex gap-6 overflow-x-auto pb-4 whitespace-nowrap">
+    {movies.map(movie => (
+      <Link
+        key={movie.id}
+        to={`/movie/${movie.id}`}
+        className="inline-block w-40 md:w-48"
+        style={{ verticalAlign: 'top' }}
+      >
+        <img
+          src={movie.image}
+          alt={movie.title}
+          className="rounded-lg shadow-lg hover:scale-105 transition-transform duration-200 w-full h-60 md:h-72 object-cover"
+        />
+        <h3 className="text-white mt-2 text-base md:text-lg font-semibold text-center">{movie.title}</h3>
+      </Link>
+    ))}
         </div>
       </div>
     </div>
