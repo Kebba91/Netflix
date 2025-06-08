@@ -1,12 +1,26 @@
+import { useNavigate } from 'react-router-dom';
 import HeroBanner from '../components/HeroBanner';
 import TrendingNow from '../components/TrendingNow';
 import { movies } from './data/movies';
 
 export default function Home() {
   const featured = movies[0];
+  const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    navigate('/login');
+  };
 
   return (
     <div className="bg-black min-h-screen">
+      {/* Top Navigation */}
+      <div className="flex justify-end px-4 py-4">
+        <button
+          onClick={handleSignIn}
+          className="text-white bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition"
+        >
+        </button>
+      </div>
       {/* Hero Banner */}
       <HeroBanner featured={featured} />
 

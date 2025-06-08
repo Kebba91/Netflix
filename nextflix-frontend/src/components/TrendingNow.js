@@ -15,8 +15,8 @@ export default function TrendingNow() {
     img: "https://image.tmdb.org/t/p/w500/6zltP23zLGPogsHZUazSrrwNuKs.jpg",
   },
   {
-    title: "Big Mouth",
-    img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/3Xl0QrRN9uJz2aVZYkz1n44v6uH.jpg",
+    title: "Stranger Things",
+    img: "https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
   },
   {
     title: "Squid Game",
