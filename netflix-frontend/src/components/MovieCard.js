@@ -1,21 +1,26 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function MovieCard({ movie }) {
+  const poster = movie.poster_path || movie.backdrop_path;
+
   return (
-    <div className="w-40 mr-4">
+    <Link to={`/${movie.media_type || 'movie'}/${movie.id}`} className="min-w-[150px] group">
       <img
-        src={movie.posterUrl}
-        alt={movie.title}
-        className="rounded-md shadow-md w-full h-60 object-cover"
+        src={
+          poster
+            ? `https://image.tmdb.org/t/p/w500${poster}`
+            : 'https://via.placeholder.com/300x450?text=No+Image'
+        }
+        alt={movie.title || movie.name}
+        className="rounded-lg shadow-md border border-gray-700 hover:border-red-600 hover:scale-105 transition-transform duration-200 w-full h-[225px] object-cover"
+        onError={e => {
+          e.target.onerror = null;
+          e.target.src = 'https://via.placeholder.com/300x450?text=No+Image';
+        }}
       />
-      <h3 className="text-sm mt-1 font-medium">{movie.title}</h3>
-      <Link
-        to={`/movie/${movie._id}`}
-        className="text-blue-500 hover:underline text-xs block mt-1"
-      >
-        View
-      </Link>
-    </div>
+      <h3 className="mt-2 text-center text-white font-semibold truncate">
+        {movie.title || movie.name}
+      </h3>
+    </Link>
   );
 }
