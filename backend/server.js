@@ -45,6 +45,47 @@ app.post('/api/create-subscription', async (req, res) => {
   }
 });
 
+// Stripe Checkout route (one-time or subscription via redirect)
+app.post('/api/create-checkout-session', async (req, res) => {
+  const { plan } = req.body;
+  let priceId;
+
+  // Map frontend plan to Stripe price ID
+  switch (plan.toLowerCase()) {
+    case 'basic':
+      priceId = 'price_123basic'; // Replace with your real Stripe price ID
+      break;
+    case 'standard':
+      priceId = 'price_123standard';
+      break;
+    case 'premium':
+      priceId = 'price_123premium';
+      break;
+    default:
+      return res.status(400).json({ error: 'Invalid plan selected' });
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'subscription',
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      success_url: 'http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'http://localhost:3000/subscribe',
+    });
+
+    res.json({ sessionUrl: session.url });
+  } catch (error) {
+    console.error('Stripe session error:', error);
+    res.status(500).json({ error: 'Failed to create checkout session' });
+  }
+});
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');

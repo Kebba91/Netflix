@@ -1,32 +1,28 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+const TRENDING_URL = `https://api.themoviedb.org/3/trending/tv/week?api_key=${API_KEY}`;
+
 export default function TrendingNow() {
-  // Use real TMDB poster images
-  const trending = [
-  {
-    title: "Ginny & Georgia",
-    img: "https://image.tmdb.org/t/p/w500/2M2JxEv3HSpjnZWjY9NOdGgfUd.jpg",
-  },
-  {
-    title: "Rhythm + Flow",
-    img: "https://image.tmdb.org/t/p/w500/6zltP23zLGPogsHZUazSrrwNuKs.jpg",
-  },
-  {
-    title: "Stranger Things",
-    img: "https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
-  },
-  {
-    title: "Squid Game",
-    img: "https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg",
-  },
-  {
-    title: "You",
-    img: "https://image.tmdb.org/t/p/w500/7bEYwjUvlJW7GerM8GYmqwl4oS3.jpg",
-  },
-];
+  const [trending, setTrending] = useState([]);
+
+  useEffect(() => {
+    const fetchTrending = async () => {
+      try {
+        const res = await fetch(TRENDING_URL);
+        const data = await res.json();
+        setTrending(data.results || []);
+      } catch (error) {
+        console.error('Failed to fetch trending shows:', error);
+      }
+    };
+
+    fetchTrending();
+  }, []);
 
   const sliderSettings = {
     dots: false,
@@ -43,39 +39,44 @@ export default function TrendingNow() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-8">
-      <div className="mt-12 px-4">
-        <h2 className="text-2xl text-white font-bold mb-6">Trending Now</h2>
+    <div className="bg-black text-white py-12 px-4 md:px-8">
+      <h2 className="text-2xl font-bold mb-6">Trending Now</h2>
+      {trending.length > 0 ? (
         <Slider {...sliderSettings}>
           {trending.map((show, idx) => (
-            <div key={idx} className="px-2">
+            <div key={show.id} className="px-2">
               <div className="relative group">
-                {/* Netflix logo */}
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-                  alt="Netflix"
-                  className="absolute top-2 left-2 w-8 h-4 z-20 opacity-90"
-                />
-                {/* Card number */}
-                <span className="absolute -left-4 top-4 text-7xl font-extrabold text-white opacity-90 drop-shadow-lg select-none z-20"
-                  style={{ WebkitTextStroke: '2px #111' }}>
+                <span
+                  className="absolute -left-4 top-4 text-7xl font-extrabold text-white opacity-90 drop-shadow-lg select-none z-20"
+                  style={{ WebkitTextStroke: '2px #111' }}
+                >
                   {idx + 1}
                 </span>
                 <Link to="#">
                   <img
-                    src={show.img}
-                    alt={show.title}
-                    className="rounded-lg shadow-xl border-2 border-black hover:border-red-600 hover:scale-105 transition-transform duration-200 w-full h-[320px] object-cover bg-gray-900"
-                    style={{ aspectRatio: '2/3' }}
-                    onError={e => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/200x300?text=No+Image'; }}
+                    src={
+                      show.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
+                        : 'https://via.placeholder.com/300x450?text=No+Image'
+                    }
+                    alt={show.name || show.title}
+                    className="rounded-lg shadow-md border border-gray-700 hover:border-red-600 hover:scale-105 transition-transform duration-200 w-full h-[320px] object-cover"
+                    onError={e => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://via.placeholder.com/300x450?text=No+Image';
+                    }}
                   />
-                  <h3 className="text-white mt-2 text-base md:text-lg font-semibold text-center">{show.title}</h3>
+                  <h3 className="text-center mt-2 text-base font-semibold truncate">
+                    {show.name || show.title}
+                  </h3>
                 </Link>
               </div>
             </div>
           ))}
         </Slider>
-      </div>
+      ) : (
+        <p className="text-gray-400">Loading trending shows...</p>
+      )}
     </div>
   );
 }
