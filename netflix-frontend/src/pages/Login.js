@@ -10,7 +10,7 @@ export default function Login() {
     e.preventDefault();
     if (email && password) {
       localStorage.setItem('user', JSON.stringify({ email }));
-      navigate('/');
+      navigate('/profiles');
     }
   };
 
