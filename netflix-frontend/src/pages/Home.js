@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import HeroBanner from '../components/HeroBanner';
-import PopularNow from '../components/PopularNow';
 import TrendingNow from '../components/TrendingNow';
-import MyList from '../components/MyList';
 // import { movies } from './data/movies'; // Remove this static import
 
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
@@ -54,8 +52,6 @@ export default function Home() {
     <div className="bg-black min-h-screen pt-20">
       <HeroBanner featured={featured} />
       <TrendingNow movies={movies} />
-      <MyList movies={movies} />
-      <PopularNow movies={movies} />
 
       {/* More Reasons to Join */}
       <section className="mt-16 px-4 max-w-6xl mx-auto">

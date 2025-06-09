@@ -1,5 +1,5 @@
 // components/MyList.jsx
-import MovieCard from './MovieCard';
+import MovieCard from '../components/MovieCard';
 
 export default function MyList({ movies }) {
   return (
