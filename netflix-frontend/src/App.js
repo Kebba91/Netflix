@@ -9,7 +9,7 @@ import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 
 function App() {
-  const isAuthenticated = !!localStorage.getItem('user');
+  const isAuthenticated = true; // Force authenticated for now;
 
   return (
     <BrowserRouter>

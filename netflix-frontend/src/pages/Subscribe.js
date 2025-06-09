@@ -66,9 +66,9 @@ export default function Subscribe() {
   return (
     <div className="bg-black min-h-screen text-white">
       {/* Header */}
-      <div className="flex items-center px-4 py-6">
+      {/* <div className="flex items-center px-4 py-6">
         <img src="/netflix-logo.svg" alt="Netflix" className="h-10 sm:h-12" />
-      </div>
+      </div> */}
 
       {/* Plan Section */}
       <div className="text-center mt-6 mb-10 px-4">
