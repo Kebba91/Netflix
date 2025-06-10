@@ -58,23 +58,8 @@ export default function HeroBanner({ featured }) {
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black z-10"></div>
 
-      {/* Bell-style Mute/Unmute Button */}
-      {trailerKey && (
-        <button
-          onClick={() => setIsMuted(!isMuted)}
-          className="absolute top-4 right-4 z-30 bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 transition"
-          aria-label={isMuted ? 'Unmute trailer' : 'Mute trailer'}
-        >
-          {isMuted ? (
-            <SpeakerXMarkIcon className="w-6 h-6 text-white" />
-          ) : (
-            <SpeakerWaveIcon className="w-6 h-6 text-white" />
-          )}
-        </button>
-      )}
-
-      {/* Content */}
-      <div className="relative z-20 px-6 pb-20 max-w-4xl">
+      {/* Bottom Content */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 px-6 pb-10 max-w-4xl">
         <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">
           {featured?.title || featured?.name || 'Featured Title'}
         </h1>
@@ -88,6 +73,21 @@ export default function HeroBanner({ featured }) {
           </button>
         </div>
       </div>
+
+      {/* Bell Icon at Bottom Right */}
+      {trailerKey && (
+        <button
+          onClick={() => setIsMuted(!isMuted)}
+          className="absolute bottom-6 right-6 z-30 bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 transition"
+          aria-label={isMuted ? 'Unmute trailer' : 'Mute trailer'}
+        >
+          {isMuted ? (
+            <SpeakerXMarkIcon className="w-6 h-6 text-white" />
+          ) : (
+            <SpeakerWaveIcon className="w-6 h-6 text-white" />
+          )}
+        </button>
+      )}
     </section>
   );
 }
