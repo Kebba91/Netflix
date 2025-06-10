@@ -1,18 +1,46 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
   const [profileName, setProfileName] = useState('');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    const storedProfile = JSON.parse(localStorage.getItem('activeProfile'));
-    setUser(storedUser);
-    setProfileName(storedProfile?.name || '');
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      const storedProfile = JSON.parse(localStorage.getItem('activeProfile'));
+
+      if (!storedProfile) {
+        navigate('/profiles'); // Redirect if no profile is selected
+        return;
+      }
+
+      setUser(storedUser);
+      setProfileName(storedProfile.name);
+      setProfileImage(storedProfile.image);
+      setNotifications([
+        { id: 1, message: 'New episode of Stranger Things is out!' },
+        { id: 2, message: 'Your subscription will renew in 3 days.' },
+      ]);
+    } catch (err) {
+      console.error('Error loading user or profile:', err);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleSignOut = () => {
@@ -20,6 +48,7 @@ export default function Navbar() {
     localStorage.removeItem('activeProfile');
     setUser(null);
     setProfileName('');
+    setProfileImage('');
     navigate('/login');
   };
 
@@ -47,42 +76,74 @@ export default function Navbar() {
 
       {/* Right: Icons + Profile */}
       {user && (
-        <div className="flex items-center space-x-4 relative">
+        <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
           <MagnifyingGlassIcon className="w-5 h-5 cursor-pointer" />
           <Link to="/kids" className="text-sm hidden sm:inline">Kids</Link>
+
+          {/* Notifications */}
           <div className="relative">
-            <BellIcon className="w-5 h-5 cursor-pointer" />
-            <span className="absolute -top-1 -right-1 bg-red-600 text-xs rounded-full px-1">2</span>
+            <BellIcon
+              className="w-5 h-5 cursor-pointer"
+              onClick={() =>
+                setDropdownOpen(dropdownOpen === 'notifications' ? null : 'notifications')
+              }
+            />
+            {notifications.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-600 text-xs rounded-full px-1">
+                {notifications.length}
+              </span>
+            )}
+            <div
+              className={`absolute right-0 mt-2 w-72 bg-black border border-gray-700 rounded shadow-lg z-50 p-4 text-sm transition-all duration-200 ease-in-out ${
+                dropdownOpen === 'notifications' ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+              }`}
+            >
+              {notifications.length === 0 ? (
+                <p className="text-white">No new notifications</p>
+              ) : (
+                <ul className="text-white space-y-2">
+                  {notifications.map((note) => (
+                    <li key={note.id} className="border-b border-gray-700 pb-2 last:border-none">
+                      {note.message}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
 
           {/* Profile Dropdown */}
           <div className="relative">
             <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+              onClick={() =>
+                setDropdownOpen(dropdownOpen === 'profile' ? null : 'profile')
+              }
               className="flex items-center space-x-2 focus:outline-none"
             >
               <img
-                src="https://occ-0-3933-3934.1.nflxso.net/art/9c3b2/9c3b2e8c6e3b4e3e8e3b2e8c6e3b4e3e.png"
+                src={profileImage || 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png'}
                 alt="Profile"
                 className="w-8 h-8 rounded"
               />
               <span className="text-sm hidden sm:inline">{profileName || user.email}</span>
             </button>
 
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-black border border-gray-700 rounded shadow-lg z-50">
-                <Link to="/profiles" className="block px-4 py-2 text-sm hover:bg-gray-800">Manage Profiles</Link>
-                <Link to="/transfer" className="block px-4 py-2 text-sm hover:bg-gray-800">Transfer Profile</Link>
-                <Link to="/membership" className="block px-4 py-2 text-sm hover:bg-gray-800">Account</Link>
-                <Link to="/help" className="block px-4 py-2 text-sm hover:bg-gray-800">Help Center</Link>
-                <button
-                  onClick={handleSignOut}
-                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-800"
-                >
-                  Sign Out of Netflix
-                </button>
-              </div>
-            )}
+            <div
+              className={`absolute right-0 mt-2 w-56 bg-black border border-gray-700 rounded shadow-lg z-50 transition-all duration-200 ease-in-out ${
+                dropdownOpen === 'profile' ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+              }`}
+            >
+              <Link to="/profiles" className="block px-4 py-2 text-sm hover:bg-gray-800">Manage Profiles</Link>
+              <Link to="/transfer" className="block px-4 py-2 text-sm hover:bg-gray-800">Transfer Profile</Link>
+              <Link to="/membership" className="block px-4 py-2 text-sm hover:bg-gray-800">Account</Link>
+              <Link to="/help" className="block px-4 py-2 text-sm hover:bg-gray-800">Help Center</Link>
+              <button
+                onClick={handleSignOut}
+                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-800"
+              >
+                Sign Out of Netflix
+              </button>
+            </div>
           </div>
         </div>
       )}
