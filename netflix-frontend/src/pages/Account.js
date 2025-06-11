@@ -1,42 +1,64 @@
-// src/pages/Account.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import QuickLinkCard from '../components/QuickLinkCard';
 
 export default function Account() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error] = useState(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setUser({
+        name: 'User Surname',
+        plan: 'Standard plan',
+        memberSince: 'January 2024',
+        nextPayment: 'July 3, 2025',
+        card: 'VISA •••• 0000',
+      });
+      setLoading(false);
+    }, 1000);
+  }, []);
+
+  if (loading) return <p className="text-white">Loading...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
+  if (!user) return <p className="text-white">No user data available.</p>;
+
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-1 text-white">Account</h1>
-      <h2 className="text-lg text-gray-400 mb-4">Membership Details</h2>
+    <div className="space-y-8">
+      {/* Header Section */}
+      <section className="border-b border-gray-700 pb-6">
+        <h1 className="text-3xl font-bold text-white mb-2">Account</h1>
+        <p className="text-sm text-gray-400">Membership Details</p>
+        <div className="mt-4 space-y-2">
+          <span className="inline-block bg-purple-700 text-xs text-white px-2 py-1 rounded">
+            Member since {user.memberSince}
+          </span>
+          <p className="text-white font-semibold">{user.plan}</p>
+          <p className="text-sm text-gray-400">Next payment: {user.nextPayment}</p>
+          <p className="text-sm text-gray-400">{user.card}</p>
+          <Link to="/manage-membership">
+            <button className="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+              Manage membership
+            </button>
+          </Link>
+        </div>
+      </section>
 
-      <div className="mb-6 text-white">
-        <span className="inline-block bg-purple-800 text-white text-xs font-semibold px-2 py-1 rounded mb-2">
-          Member since January 2020
-        </span>
-        <p className="font-semibold">Standard plan</p>
-        <p className="text-sm text-gray-400">Next payment: July 3, 2023</p>
-        <p className="text-sm text-gray-400 mb-2">VISA **** **** **** 5566</p>
-        <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-          Manage membership
-        </button>
-      </div>
-
-      <div>
-        <h3 className="text-md font-semibold mb-2 text-white">Quick Links:</h3>
-        <ul className="space-y-2 text-red-500">
-          <li><Link to="/change-plan" className="hover:underline">Change plan</Link></li>
-          <li><Link to="/manage-payment" className="hover:underline">Manage payment method</Link></li>
-          <li>
-            <Link to="/extra-member" className="hover:underline">
-              Buy an extra member slot
-              <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">New</span>
-            </Link>
-          </li>
-          <li><Link to="/access-devices" className="hover:underline">Manage access and devices</Link></li>
-          <li><Link to="/update-password" className="hover:underline">Update password</Link></li>
-          <li><Link to="/parental-controls" className="hover:underline">Adjust parental controls</Link></li>
-          <li><Link to="/edit-settings" className="hover:underline">Edit settings</Link></li>
-        </ul>
-      </div>
+      {/* Quick Links Section */}
+      <section>
+        <h2 className="text-lg text-white font-semibold mb-4">Quick Links</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <QuickLinkCard to="/change-plan" label="Change plan" />
+          <QuickLinkCard to="/manage-payment" label="Manage payment method" />
+          <QuickLinkCard to="/extra-member" label="Buy an extra member slot" tag="New" />
+          <QuickLinkCard to="/access-devices" label="Manage access and devices" />
+          <QuickLinkCard to="/profile" label="Update password" />
+          <QuickLinkCard to="/transfer-profile" label="Transfer a profile" />
+          <QuickLinkCard to="/parental-controls" label="Adjust parental controls" />
+          <QuickLinkCard to="/profile" label="Edit settings" />
+        </div>
+      </section>
     </div>
   );
 }

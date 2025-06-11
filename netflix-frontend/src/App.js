@@ -12,6 +12,7 @@ import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 import Profiles from './pages/Profiles';
 import TVShows from './pages/TVShows';
+import ManageMembership from './pages/ManageMembership';
 import Games from './pages/Games';
 import MyList from './pages/MyList';
 import MoviesPage from './pages/MoviesPage';
@@ -22,10 +23,17 @@ import LanguagesPage from './pages/LanguagesPage';
 import ChangePlan from './pages/ChangePlan';
 import ManagePayment from './pages/ManagePayment';
 import BackupPayment from './pages/BackupPayment';
+import PaymentHistory from './pages/PaymentHistory';
+import CancelMembership from './pages/CancelMembership';
+import BuyExtraMember from './pages/BuyExtraMember';
+import ShareNetflix from './pages/ShareNetflix';
 import Redeem from './pages/Redeem';
 import Devices from './pages/Devices';
 import SignOut from './pages/SignOut';
+import UpdatePassword from './pages/UpdatePassword';
+import EditSettings from './pages/EditSettings';
 import Language from './pages/Language';
+import ManageDevices from './pages/ManageDevices';
 import Playback from './pages/Playback';
 import Subtitles from './pages/Subtitles';
 import ParentalControls from './pages/ParentalControls';
@@ -36,6 +44,11 @@ import Security from './pages/Security';
 import Profile from './pages/Profile';
 import HelpCenter from './pages/HelpCenter';
 import TransferProfile from './pages/TransferProfile';
+import PersonalInfo from './pages/PersonalInfo';
+import DeleteAccount from './pages/DeleteAccount';
+import AddPhone from './pages/AddPhone';
+import ChangePassword from './pages/ChangePassword';
+import MobileDownloads from './pages/MobileDownloads';
 
 // Layout
 import Account from './pages/Account';
@@ -97,7 +110,16 @@ function AppWrapper() {
           <Route path="/manage-payment" element={isAuthenticated ? <ManagePayment /> : <Navigate to="/login" />} />
           <Route path="/backup-payment" element={isAuthenticated ? <BackupPayment /> : <Navigate to="/login" />} />
            <Route path="/games" element={isAuthenticated ? <Games /> : <Navigate to="/login" />} />
+           <Route path="/update-password" element={<UpdatePassword />} />
+           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/redeem" element={isAuthenticated ? <Redeem /> : <Navigate to="/login" />} />
+           <Route path="/edit-settings" element={<EditSettings />} />
+           <Route path="/add-phone" element={<AddPhone />} />
+           <Route path="/manage-membership" element={<ManageMembership />} />
+           <Route path="/payment-history" element={<PaymentHistory />} />
+           <Route path="/cancel-membership" element={<CancelMembership />} />
+           <Route path="/mobile-downloads" element={<MobileDownloads />} />
+           <Route path="/access-devices" element={<ManageDevices />} />
           <Route path="/devices" element={isAuthenticated ? <Devices /> : <Navigate to="/login" />} />
           <Route path="/signout" element={isAuthenticated ? <SignOut /> : <Navigate to="/login" />} />
           <Route path="/language-preferences" element={isAuthenticated ? <LanguagePreferences /> : <Navigate to="/login" />} />
@@ -108,10 +130,16 @@ function AppWrapper() {
           <Route path="/manage-profile" element={isAuthenticated ? <ManageProfile /> : <Navigate to="/login" />} />
           <Route path="/overview" element={isAuthenticated ? <Overview /> : <Navigate to="/login" />} />
           <Route path="/membership" element={isAuthenticated ? <Account /> : <Navigate to="/login" />} />
+          <Route path="/personal-info" element={<PersonalInfo />} />
           <Route path="/membership-details" element={isAuthenticated ? <Membership /> : <Navigate to="/login" />} />
+          <Route path="/buy-extra-member" element={<BuyExtraMember />} />
+          <Route path="/share-netflix" element={<ShareNetflix />} />
           <Route path="/security" element={isAuthenticated ? <Security /> : <Navigate to="/login" />} />
           <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
+          <Route path="/profiles" element={<Profiles />} />
+          <Route path="/transfer-profile" element={<TransferProfile />} />
           <Route path="/help" element={isAuthenticated ? <HelpCenter /> : <Navigate to="/login" />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
           <Route path="/transfer" element={isAuthenticated ? <TransferProfile /> : <Navigate to="/login" />} />
         </Route>
 

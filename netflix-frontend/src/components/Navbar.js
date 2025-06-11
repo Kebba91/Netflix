@@ -1,9 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import './Navbar.css';
 
 export default function Navbar() {
+  const location = useLocation(); // Get current route
   const [user, setUser] = useState(null);
   const [profileName, setProfileName] = useState('');
   const [profileImage, setProfileImage] = useState('');
@@ -24,7 +25,6 @@ export default function Navbar() {
       setUser(storedUser);
       setProfileName(storedProfile.name);
       setProfileImage(storedProfile.image);
-      // Notifications will be loaded dynamically in the future
     } catch (err) {
       console.error('Error loading user or profile:', err);
     }
@@ -54,6 +54,11 @@ export default function Navbar() {
     setProfileImage('');
     navigate('/login');
   };
+
+  // Hide navbar on /profiles route
+  if (location.pathname === '/profiles') {
+    return null;
+  }
 
   return (
     <nav className="w-full fixed top-0 left-0 z-50 flex justify-between items-center px-6 sm:px-12 py-4 bg-black bg-opacity-80 text-white">
