@@ -1,6 +1,7 @@
 // components/MyList.jsx
 import MovieCard from '../components/MovieCard';
 
+
 export default function MyList({ movies }) {
   return (
     <section className="mt-12 max-w-6xl mx-auto px-6">

@@ -1,41 +1,12 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Home from './pages/Home';
-import Subscribe from './pages/Subscribe';
-import MovieDetails from './pages/MovieDetails';
-import Navbar from './components/Navbar';
-import Landing from './pages/Landing';
-import Profiles from './pages/Profiles';
-import TVShows from './pages/TVShows';
-import Games from './pages/Games';
-import MyList from './pages/MyList';
-import MoviesPage from './pages/MoviesPage';
-import NewPopularPage from './pages/NewPopularPage';
-import LanguagesPage from './pages/LanguagesPage';
-
-// Account-related pages
-import ChangePlan from './pages/ChangePlan';
-import ManagePayment from './pages/ManagePayment';
-import BackupPayment from './pages/BackupPayment';
-import Redeem from './pages/Redeem';
-import Devices from './pages/Devices';
-import SignOut from './pages/SignOut';
-import Language from './pages/Language';
-import Playback from './pages/Playback';
-import Subtitles from './pages/Subtitles';
-import ParentalControls from './pages/ParentalControls';
-import ManageProfile from './pages/ManageProfile';
-import Overview from './pages/Overview';
-import Membership from './pages/Membership';
-import Security from './pages/Security';
-import Profile from './pages/Profile';
-import HelpCenter from './pages/HelpCenter';
-import TransferProfile from './pages/TransferProfile';
-
-// Layout
-import Account from './pages/Account';
+import {
+  Login, Register, Home, Subscribe, MovieDetails, Navbar, Landing, Profiles,
+  TVShows, Games, MyList, MoviesPage, NewPopularPage, LanguagesPage,
+  ChangePlan, ManagePayment, BackupPayment, Redeem, Devices, SignOut,
+  Language, Playback, Subtitles, ParentalControls, ManageProfile, Overview,
+  Membership, Security, Profile, HelpCenter, TransferProfile, Account
+} from './pages'; // Adjust this import if needed
 import AccountLayout from './layouts/AccountLayout';
 
 function AppWrapper() {
@@ -43,29 +14,24 @@ function AppWrapper() {
   const location = useLocation();
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    setIsAuthenticated(!!user);
+    const checkAuth = () => {
+      const user = localStorage.getItem('user');
+      setIsAuthenticated(!!user);
+    };
+
+    checkAuth(); // Initial check
+    window.addEventListener('authChanged', checkAuth);
+
+    return () => {
+      window.removeEventListener('authChanged', checkAuth);
+    };
   }, []);
-// This effect runs once on mount to check if the user is authenticated
+
   const hideNavbarRoutes = [
-    '/membership', 
-    '/change-plan',
-    '/manage-payment',
-    '/backup-payment',
-    '/redeem',
-    '/devices',
-    '/signout',
-    '/language',
-    '/playback',
-    '/subtitles',
-    '/parental-controls',
-    '/manage-profile',
-    '/overview',
-    '/membership-details',
-    '/security',
-    '/profile',
-    '/help',
-    '/transfer',
+    '/membership', '/change-plan', '/manage-payment', '/backup-payment',
+    '/redeem', '/devices', '/signout', '/language', '/playback', '/subtitles',
+    '/parental-controls', '/manage-profile', '/overview', '/membership-details',
+    '/security', '/profile', '/help', '/transfer',
   ];
 
   const shouldShowNavbar = isAuthenticated && !hideNavbarRoutes.includes(location.pathname);
@@ -87,14 +53,13 @@ function AppWrapper() {
         <Route path="/new-popular" element={isAuthenticated ? <NewPopularPage /> : <Navigate to="/login" />} />
         <Route path="/languages" element={isAuthenticated ? <LanguagesPage /> : <Navigate to="/login" />} />
 
-        {/* Account-related routes wrapped in AccountLayout */}
         <Route element={<AccountLayout />}>
           <Route path="/change-plan" element={isAuthenticated ? <ChangePlan /> : <Navigate to="/login" />} />
           <Route path="/manage-payment" element={isAuthenticated ? <ManagePayment /> : <Navigate to="/login" />} />
           <Route path="/backup-payment" element={isAuthenticated ? <BackupPayment /> : <Navigate to="/login" />} />
           <Route path="/redeem" element={isAuthenticated ? <Redeem /> : <Navigate to="/login" />} />
           <Route path="/devices" element={isAuthenticated ? <Devices /> : <Navigate to="/login" />} />
-          <Route path="/signout" element={isAuthenticated ? <SignOut /> : <Navigate to="/login" />} />
+          <Route path="/signout" element={<SignOut />} />
           <Route path="/language" element={isAuthenticated ? <Language /> : <Navigate to="/login" />} />
           <Route path="/playback" element={isAuthenticated ? <Playback /> : <Navigate to="/login" />} />
           <Route path="/subtitles" element={isAuthenticated ? <Subtitles /> : <Navigate to="/login" />} />
@@ -115,10 +80,4 @@ function AppWrapper() {
   );
 }
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <AppWrapper />
-    </BrowserRouter>
-  );
-}
+export default AppWrapper;

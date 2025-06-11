@@ -1,5 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
+import MovieCard from '../components/MovieCard';
+// Make sure the path is correct
 
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -13,6 +14,7 @@ const categories = [
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState({});
+  const [myList, setMyList] = useState([]);
 
   useEffect(() => {
     const fetchCategory = async (category) => {
@@ -32,19 +34,24 @@ export default function MoviesPage() {
     fetchAll();
   }, []);
 
+  const handleToggleMyList = (movie) => {
+    setMyList((prevList) => {
+      const exists = prevList.some((m) => m.id === movie.id);
+      return exists ? prevList.filter((m) => m.id !== movie.id) : [...prevList, movie];
+    });
+  };
+
   const renderRow = (title, items) => (
     <div className="mb-10">
       <h2 className="text-2xl font-semibold mb-3">{title}</h2>
       <div className="flex space-x-4 overflow-x-auto scrollbar-hide">
         {items?.map((movie) => (
-          <div key={movie.id} className="min-w-[150px] group relative">
-            <img
-              src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-              alt={movie.title}
-              className="rounded-lg transition-transform duration-300 group-hover:scale-105"
-            />
-            <p className="mt-2 text-sm">{movie.title}</p>
-          </div>
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            isInMyList={myList.some((m) => m.id === movie.id)}
+            onToggleMyList={handleToggleMyList}
+          />
         ))}
       </div>
     </div>
