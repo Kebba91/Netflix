@@ -1,45 +1,55 @@
-import React from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+// src/layouts/AccountLayout.js
+import { NavLink, Outlet, Link } from 'react-router-dom';
+import netflixLogo from '../assets/netflix-logo.svg'; // Make sure this file exists
+import Footer from '../components/Footer'; // Ensure the Footer component is created
 
 export default function AccountLayout() {
-  const location = useLocation();
-
-  const sidebarLinks = [
-    { label: 'Overview', path: '/overview' },
-    { label: 'Membership', path: '/membership-details' },
-    { label: 'Security', path: '/security' },
-    { label: 'Devices', path: '/devices' },
-    { label: 'Profile', path: '/profile' },
-    { label: 'Help Center', path: '/help' },
-    { label: 'Transfer Profile', path: '/transfer' },
-  ];
-
   return (
-    <div className="min-h-screen bg-white text-black font-sans flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-100 p-6 border-r">
-        <Link to="/" className="text-red-600 text-2xl font-bold mb-6 hover:underline">
-         Netflix
-         </Link>
-        <nav className="space-y-3 text-sm font-medium">
-          {sidebarLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`block px-2 py-1 rounded hover:bg-gray-200 ${
-                location.pathname === link.path ? 'text-red-600 font-semibold' : ''
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
+    <div className="flex flex-col min-h-screen bg-black text-white">
+      <div className="flex flex-1">
+        <aside className="w-64 p-6 bg-[#141414] space-y-6 border-r border-gray-700">
+          {/* Netflix Logo */}
+          <Link to="/">
+            <img
+              src={netflixLogo}
+              alt="Netflix"
+              className="w-28 mb-4 hover:opacity-80 transition duration-200"
+            />
+          </Link>
 
-      {/* Main Content */}
-      <main className="flex-1 p-10">
-        <Outlet />
-      </main>
+          {/* Back to Netflix */}
+          <Link to="/" className="flex items-center text-red-500 hover:underline text-sm">
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Netflix
+          </Link>
+
+          {/* Navigation Links */}
+          <nav className="space-y-2 text-sm mt-6">
+            <NavLink to="/overview" className="block hover:text-red-500">Overview</NavLink>
+            <NavLink to="/membership" className="block hover:text-red-500">Membership</NavLink>
+            <NavLink to="/security" className="block hover:text-red-500">Security</NavLink>
+            <NavLink to="/devices" className="block hover:text-red-500">Devices</NavLink>
+            <NavLink to="/profiles" className="block hover:text-red-500">Profiles</NavLink>
+            {/* <NavLink to="/help" className="block hover:text-red-500">Help Center</NavLink> */}
+            {/* <NavLink to="/transfer-profile" className="block hover:text-red-500">Transfer Profile</NavLink> */}
+          </nav>
+        </aside>
+
+        <main className="flex-1 p-8">
+          <Outlet />
+        </main>
+      </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
