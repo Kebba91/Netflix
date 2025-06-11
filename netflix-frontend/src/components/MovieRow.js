@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
 export default function MovieRow({ title, fetchUrl, mockData = null }) {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
@@ -23,12 +25,14 @@ export default function MovieRow({ title, fetchUrl, mockData = null }) {
   };
 
   useEffect(() => {
-    if (mockData) {
-      setMovies(mockData);
-      return;
-    }
+    const fetchMovies = async () => {
+      if (mockData) {
+        setMovies(mockData);
+        return;
+      }
 
-    async function fetchMovies() {
+      if (!fetchUrl) return;
+
       try {
         const res = await fetch(`https://api.themoviedb.org/3${fetchUrl}`);
         if (!res.ok) throw new Error('Failed to fetch movies');
@@ -37,11 +41,9 @@ export default function MovieRow({ title, fetchUrl, mockData = null }) {
       } catch (err) {
         setError(err.message);
       }
-    }
+    };
 
-    if (fetchUrl) {
-      fetchMovies();
-    }
+    fetchMovies();
   }, [fetchUrl, mockData]);
 
   if (error) {

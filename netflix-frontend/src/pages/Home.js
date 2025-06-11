@@ -14,22 +14,9 @@ const requests = {
   documentaries: `/discover/movie?api_key=${API_KEY}&with_genres=99`,
 };
 
-// Mock data for "Continue Watching"
-const mockContinueWatching = [
-  {
-    id: 1,
-    title: 'Stranger Things',
-    poster_path: '/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg',
-  },
-  {
-    id: 2,
-    title: 'Breaking Bad',
-    poster_path: '/ggFHVNu6YYI5L9pCfOacjizRGt.jpg',
-  },
-];
-
 export default function Home() {
   const [featured, setFeatured] = useState(null);
+  const [continueWatching, setContinueWatching] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -43,7 +30,22 @@ export default function Home() {
         setError(err.message);
       }
     };
+
+    const fetchContinueWatching = async () => {
+      const storedIds = JSON.parse(localStorage.getItem('continueWatching')) || [];
+      try {
+        const moviePromises = storedIds.map(id =>
+          fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`).then(res => res.json())
+        );
+        const movies = await Promise.all(moviePromises);
+        setContinueWatching(movies);
+      } catch (err) {
+        console.error('Failed to fetch continue watching movies:', err);
+      }
+    };
+
     fetchFeatured();
+    fetchContinueWatching();
   }, []);
 
   if (error) {
@@ -57,7 +59,9 @@ export default function Home() {
   return (
     <div className="bg-black min-h-screen pt-20">
       {featured && <HeroBanner featured={featured} />}
-      <MovieRow title="Continue Watching for Kebba_k" mockData={mockContinueWatching} />
+      {continueWatching.length > 0 && (
+        <MovieRow title="Continue Watching for Kebba_k" mockData={continueWatching} />
+      )}
       <MovieRow title="Trending Now" fetchUrl={requests.trending} />
       <MovieRow title="Top Rated" fetchUrl={requests.topRated} />
       <MovieRow title="Action Movies" fetchUrl={requests.actionMovies} />
