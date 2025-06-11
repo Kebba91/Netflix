@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import EditProfile from './pages/EditProfile'; 
+import ChangeEmail from './pages/ChangeEmail';
+import LanguagePreferences from './pages/LanguagePreferences';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -81,7 +84,8 @@ function AppWrapper() {
         <Route path="/subscribe" element={isAuthenticated ? <Subscribe /> : <Navigate to="/login" />} />
         <Route path="/profiles" element={isAuthenticated ? <Profiles /> : <Navigate to="/login" />} />
         <Route path="/tv-shows" element={isAuthenticated ? <TVShows /> : <Navigate to="/login" />} />
-        <Route path="/games" element={isAuthenticated ? <Games /> : <Navigate to="/login" />} />
+        <Route path="/change-email" element={isAuthenticated ? <ChangeEmail /> : <Navigate to="/login" />} />
+        <Route path="/edit-profile" element={isAuthenticated ? <EditProfile /> : <Navigate to="/login" />} />
         <Route path="/my-list" element={isAuthenticated ? <MyList /> : <Navigate to="/login" />} />
         <Route path="/movies" element={isAuthenticated ? <MoviesPage /> : <Navigate to="/login" />} />
         <Route path="/new-popular" element={isAuthenticated ? <NewPopularPage /> : <Navigate to="/login" />} />
@@ -92,9 +96,11 @@ function AppWrapper() {
           <Route path="/change-plan" element={isAuthenticated ? <ChangePlan /> : <Navigate to="/login" />} />
           <Route path="/manage-payment" element={isAuthenticated ? <ManagePayment /> : <Navigate to="/login" />} />
           <Route path="/backup-payment" element={isAuthenticated ? <BackupPayment /> : <Navigate to="/login" />} />
+           <Route path="/games" element={isAuthenticated ? <Games /> : <Navigate to="/login" />} />
           <Route path="/redeem" element={isAuthenticated ? <Redeem /> : <Navigate to="/login" />} />
           <Route path="/devices" element={isAuthenticated ? <Devices /> : <Navigate to="/login" />} />
           <Route path="/signout" element={isAuthenticated ? <SignOut /> : <Navigate to="/login" />} />
+          <Route path="/language-preferences" element={isAuthenticated ? <LanguagePreferences /> : <Navigate to="/login" />} />
           <Route path="/language" element={isAuthenticated ? <Language /> : <Navigate to="/login" />} />
           <Route path="/playback" element={isAuthenticated ? <Playback /> : <Navigate to="/login" />} />
           <Route path="/subtitles" element={isAuthenticated ? <Subtitles /> : <Navigate to="/login" />} />
