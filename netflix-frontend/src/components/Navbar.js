@@ -4,7 +4,7 @@ import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import './Navbar.css';
 
 export default function Navbar() {
-  const location = useLocation(); // Get current route
+  const location = useLocation();
   const [user, setUser] = useState(null);
   const [profileName, setProfileName] = useState('');
   const [profileImage, setProfileImage] = useState('');
@@ -15,18 +15,19 @@ export default function Navbar() {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    try {
-      const storedUser = JSON.parse(localStorage.getItem('user'));
-      const storedProfile = JSON.parse(localStorage.getItem('activeProfile'));
-      if (!storedProfile) {
-        navigate('/profiles');
-        return;
-      }
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const storedProfile = JSON.parse(localStorage.getItem('activeProfile'));
+
+    // ✅ Only redirect to /profiles if user is logged in
+    if (storedUser && !storedProfile) {
+      navigate('/profiles');
+      return;
+    }
+
+    if (storedUser && storedProfile) {
       setUser(storedUser);
       setProfileName(storedProfile.name);
       setProfileImage(storedProfile.image);
-    } catch (err) {
-      console.error('Error loading user or profile:', err);
     }
   }, [navigate]);
 
@@ -52,10 +53,10 @@ export default function Navbar() {
     setUser(null);
     setProfileName('');
     setProfileImage('');
-    navigate('/login');
+    window.dispatchEvent(new Event('authChanged'));
+    navigate('/signout');
   };
 
-  // Hide navbar on /profiles route
   if (location.pathname === '/profiles') {
     return null;
   }

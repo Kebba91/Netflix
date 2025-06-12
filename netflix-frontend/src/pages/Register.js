@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import Logo from '../components/Logo'; 
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -21,6 +22,7 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="bg-gray-900 p-8 rounded shadow-md w-80"
       >
+        <Logo />
         <h2 className="text-2xl text-white mb-6 font-bold">Sign Up</h2>
         <input
           type="email"

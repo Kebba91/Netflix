@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import Logo from '../components/Logo'; 
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -7,31 +8,33 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (email && password) {
-      localStorage.setItem('user', JSON.stringify({ email }));
-      navigate('/profiles');
-    }
-  };
+  e.preventDefault();
+  if (email && password) {
+    // Save user
+    localStorage.setItem('user', JSON.stringify({ email }));
 
+    // Clear any previously selected profile
+    localStorage.removeItem('activeProfile');
+
+    // Notify app of auth change
+    window.dispatchEvent(new Event('authChanged'));
+
+    // Redirect to profile selector
+    navigate('/profiles');
+  }
+};
   return (
     <div
       className="relative flex items-center justify-center min-h-screen overflow-hidden"
       style={{
-        backgroundImage:
-          'url(https://assets.nflxext.com/ffe/siteui/vlv3/7e1e5c7e-2b7d-4b3e-8e7e-2c2e7e7e7e7e/7e1e5c7e-2b7d-4b3e-8e7e-2c2e7e7e7e7e_PL-en-20230731-popsignuptwoweeks-perspective_alpha_website_large.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+          backgroundImage: `url('/images/netflix-bg.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-      }}
+     }}
     >
-      {/* Optional blur + dark overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-0 pointer-events-none"></div>
-
-      {/* Netflix Logo */}
-      <span className="absolute top-8 left-8 text-3xl font-bold text-red-600 z-20">NETFLIX</span>
-
-      {/* Login Form */}
+      <Logo />
       <form
         onSubmit={handleSubmit}
         className="relative bg-black bg-opacity-80 p-10 rounded-lg shadow-lg w-full max-w-md z-10 flex flex-col"
@@ -73,12 +76,12 @@ export default function Login() {
           <span className="mx-2 text-gray-400">OR</span>
           <div className="flex-grow border-t border-gray-700"></div>
         </div>
-        <button
-          type="button"
-          className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded font-semibold mb-4"
+         <Link
+           to="/request-code"
+           className="w-full block text-center bg-gray-700 hover:bg-gray-600 text-white py-2 rounded font-semibold mb-4"
         >
           Use a Sign-In Code
-        </button>
+        </Link>
         <p className="text-gray-400 text-center text-sm mt-2">
           New to Netflix?{' '}
           <Link to="/register" className="text-white hover:underline">
