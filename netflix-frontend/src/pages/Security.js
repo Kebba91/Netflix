@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function Security() {
   return (
-    <div className="space-y-8 text-white max-w-3xl mx-auto">
+    <main className="flex-1 p-8 pt-24 space-y-10 max-w-4xl mx-auto">
       {/* Page Header */}
       <h1 className="text-3xl font-bold border-b border-gray-700 pb-4">Security</h1>
 
@@ -86,6 +86,6 @@ export default function Security() {
           <Link to="/delete-account" className="text-red-500 hover:underline">Proceed</Link>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

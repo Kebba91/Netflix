@@ -1,7 +1,7 @@
 // src/pages/Overview.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
+//import Footer from '../components/Footer';
 
 export default function Overview() {
   return (
@@ -22,7 +22,7 @@ export default function Overview() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-8 space-y-10 max-w-4xl mx-auto">
+        <main className="flex-1 p-8 pt-24 space-y-10 max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold border-b border-gray-700 pb-4">Account</h1>
 
           {/* Membership Details */}
@@ -47,7 +47,7 @@ export default function Overview() {
       </div>
 
       {/* Footer */}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

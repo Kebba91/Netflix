@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation,} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import EditProfile from './pages/EditProfile'; 
 import ChangeEmail from './pages/ChangeEmail';
@@ -14,11 +14,11 @@ import Profiles from './pages/Profiles';
 import TVShows from './pages/TVShows';
 import ManageMembership from './pages/ManageMembership';
 import Games from './pages/Games';
+import RequestCode from './pages/RequestCode';
 import MyList from './pages/MyList';
 import MoviesPage from './pages/MoviesPage';
 import NewPopularPage from './pages/NewPopularPage';
 import LanguagesPage from './pages/LanguagesPage';
-
 // Account-related pages
 import ChangePlan from './pages/ChangePlan';
 import ManagePayment from './pages/ManagePayment';
@@ -47,9 +47,9 @@ import TransferProfile from './pages/TransferProfile';
 import PersonalInfo from './pages/PersonalInfo';
 import DeleteAccount from './pages/DeleteAccount';
 import AddPhone from './pages/AddPhone';
+import SignInCode from './pages/SignInCode';
 import ChangePassword from './pages/ChangePassword';
 import MobileDownloads from './pages/MobileDownloads';
-
 // Layout
 import Account from './pages/Account';
 import AccountLayout from './layouts/AccountLayout';
@@ -57,12 +57,24 @@ import AccountLayout from './layouts/AccountLayout';
 function AppWrapper() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
+  //const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    setIsAuthenticated(!!user);
+    const checkAuth = () => {
+      const user = localStorage.getItem('user');
+      setIsAuthenticated(!!user);
+    };
+
+    checkAuth(); // Initial check
+
+    // Listen for auth changes (e.g., sign out)
+    window.addEventListener('authChanged', checkAuth);
+
+    return () => {
+      window.removeEventListener('authChanged', checkAuth);
+    };
   }, []);
-// This effect runs once on mount to check if the user is authenticated
+
   const hideNavbarRoutes = [
     '/membership', 
     '/change-plan',
@@ -91,6 +103,7 @@ function AppWrapper() {
       {shouldShowNavbar && <Navbar />}
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/signin-code" element={<SignInCode />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={isAuthenticated ? <Home /> : <Landing />} />
         <Route path="/movie/:id" element={isAuthenticated ? <MovieDetails /> : <Navigate to="/login" />} />
@@ -98,6 +111,7 @@ function AppWrapper() {
         <Route path="/profiles" element={isAuthenticated ? <Profiles /> : <Navigate to="/login" />} />
         <Route path="/tv-shows" element={isAuthenticated ? <TVShows /> : <Navigate to="/login" />} />
         <Route path="/change-email" element={isAuthenticated ? <ChangeEmail /> : <Navigate to="/login" />} />
+        <Route path="/request-code" element={<RequestCode />} />
         <Route path="/edit-profile" element={isAuthenticated ? <EditProfile /> : <Navigate to="/login" />} />
         <Route path="/my-list" element={isAuthenticated ? <MyList /> : <Navigate to="/login" />} />
         <Route path="/movies" element={isAuthenticated ? <MoviesPage /> : <Navigate to="/login" />} />
@@ -109,19 +123,19 @@ function AppWrapper() {
           <Route path="/change-plan" element={isAuthenticated ? <ChangePlan /> : <Navigate to="/login" />} />
           <Route path="/manage-payment" element={isAuthenticated ? <ManagePayment /> : <Navigate to="/login" />} />
           <Route path="/backup-payment" element={isAuthenticated ? <BackupPayment /> : <Navigate to="/login" />} />
-           <Route path="/games" element={isAuthenticated ? <Games /> : <Navigate to="/login" />} />
-           <Route path="/update-password" element={<UpdatePassword />} />
-           <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/games" element={isAuthenticated ? <Games /> : <Navigate to="/login" />} />
+          <Route path="/update-password" element={<UpdatePassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/redeem" element={isAuthenticated ? <Redeem /> : <Navigate to="/login" />} />
-           <Route path="/edit-settings" element={<EditSettings />} />
-           <Route path="/add-phone" element={<AddPhone />} />
-           <Route path="/manage-membership" element={<ManageMembership />} />
-           <Route path="/payment-history" element={<PaymentHistory />} />
-           <Route path="/cancel-membership" element={<CancelMembership />} />
-           <Route path="/mobile-downloads" element={<MobileDownloads />} />
-           <Route path="/access-devices" element={<ManageDevices />} />
+          <Route path="/edit-settings" element={<EditSettings />} />
+          <Route path="/add-phone" element={<AddPhone />} />
+          <Route path="/manage-membership" element={<ManageMembership />} />
+          <Route path="/payment-history" element={<PaymentHistory />} />
+          <Route path="/cancel-membership" element={<CancelMembership />} />
+          <Route path="/mobile-downloads" element={<MobileDownloads />} />
+          <Route path="/access-devices" element={<ManageDevices />} />
           <Route path="/devices" element={isAuthenticated ? <Devices /> : <Navigate to="/login" />} />
-          <Route path="/signout" element={isAuthenticated ? <SignOut /> : <Navigate to="/login" />} />
+          <Route path="/signout" element={<SignOut />} />
           <Route path="/language-preferences" element={isAuthenticated ? <LanguagePreferences /> : <Navigate to="/login" />} />
           <Route path="/language" element={isAuthenticated ? <Language /> : <Navigate to="/login" />} />
           <Route path="/playback" element={isAuthenticated ? <Playback /> : <Navigate to="/login" />} />
@@ -136,7 +150,6 @@ function AppWrapper() {
           <Route path="/share-netflix" element={<ShareNetflix />} />
           <Route path="/security" element={isAuthenticated ? <Security /> : <Navigate to="/login" />} />
           <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-          <Route path="/profiles" element={<Profiles />} />
           <Route path="/transfer-profile" element={<TransferProfile />} />
           <Route path="/help" element={isAuthenticated ? <HelpCenter /> : <Navigate to="/login" />} />
           <Route path="/delete-account" element={<DeleteAccount />} />

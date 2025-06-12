@@ -20,7 +20,7 @@ export default function Membership() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-8 space-y-10 max-w-4xl mx-auto">
+      <main className="flex-1 p-8 pt-24 space-y-10 max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold border-b border-gray-700 pb-4">Membership</h1>
 
         {/* Membership Details */}
