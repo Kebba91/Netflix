@@ -30,7 +30,7 @@ export default function Login() {
           backgroundImage: `url('/images/netflix-bg.jpg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+          backgroundRepeat: 'no-repeat',
      }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-0 pointer-events-none"></div>

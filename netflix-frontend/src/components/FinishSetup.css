@@ -1,0 +1,57 @@
+
+.setup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f3f3f3;
+  padding: 20px;
+}
+
+.setup-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #141414;
+}
+
+.logo {
+  height: 40px;
+}
+
+.signin-link {
+  color: #e50914;
+  text-decoration: none;
+}
+
+.setup-main {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.device-icons img {
+  margin: 0 10px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.send-link-btn {
+  padding: 10px 20px;
+  background-color: #e50914;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.setup-footer {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background-color: #141414;
+  color: #999;
+}

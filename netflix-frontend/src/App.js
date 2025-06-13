@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation,} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import EditProfile from './pages/EditProfile'; 
+
+import EditProfile from './pages/EditProfile';
 import ChangeEmail from './pages/ChangeEmail';
 import LanguagePreferences from './pages/LanguagePreferences';
 import Login from './pages/Login';
@@ -8,6 +9,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Subscribe from './pages/Subscribe';
 import MovieDetails from './pages/MovieDetails';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 import Profiles from './pages/Profiles';
@@ -19,7 +21,6 @@ import MyList from './pages/MyList';
 import MoviesPage from './pages/MoviesPage';
 import NewPopularPage from './pages/NewPopularPage';
 import LanguagesPage from './pages/LanguagesPage';
-// Account-related pages
 import ChangePlan from './pages/ChangePlan';
 import ManagePayment from './pages/ManagePayment';
 import BackupPayment from './pages/BackupPayment';
@@ -50,50 +51,30 @@ import AddPhone from './pages/AddPhone';
 import SignInCode from './pages/SignInCode';
 import ChangePassword from './pages/ChangePassword';
 import MobileDownloads from './pages/MobileDownloads';
-// Layout
 import Account from './pages/Account';
 import AccountLayout from './layouts/AccountLayout';
 
 function AppWrapper() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
-  //const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = () => {
       const user = localStorage.getItem('user');
       setIsAuthenticated(!!user);
     };
-
-    checkAuth(); // Initial check
-
-    // Listen for auth changes (e.g., sign out)
+    checkAuth();
     window.addEventListener('authChanged', checkAuth);
-
     return () => {
       window.removeEventListener('authChanged', checkAuth);
     };
   }, []);
 
   const hideNavbarRoutes = [
-    '/membership', 
-    '/change-plan',
-    '/manage-payment',
-    '/backup-payment',
-    '/redeem',
-    '/devices',
-    '/signout',
-    '/language',
-    '/playback',
-    '/subtitles',
-    '/parental-controls',
-    '/manage-profile',
-    '/overview',
-    '/membership-details',
-    '/security',
-    '/profile',
-    '/help',
-    '/transfer',
+    '/membership', '/change-plan', '/manage-payment', '/backup-payment', '/redeem',
+    '/devices', '/signout', '/language', '/playback', '/subtitles', '/parental-controls',
+    '/manage-profile', '/overview', '/membership-details', '/security', '/profile',
+    '/help', '/transfer',
   ];
 
   const shouldShowNavbar = isAuthenticated && !hideNavbarRoutes.includes(location.pathname);
@@ -117,8 +98,6 @@ function AppWrapper() {
         <Route path="/movies" element={isAuthenticated ? <MoviesPage /> : <Navigate to="/login" />} />
         <Route path="/new-popular" element={isAuthenticated ? <NewPopularPage /> : <Navigate to="/login" />} />
         <Route path="/languages" element={isAuthenticated ? <LanguagesPage /> : <Navigate to="/login" />} />
-
-        {/* Account-related routes wrapped in AccountLayout */}
         <Route element={<AccountLayout />}>
           <Route path="/change-plan" element={isAuthenticated ? <ChangePlan /> : <Navigate to="/login" />} />
           <Route path="/manage-payment" element={isAuthenticated ? <ManagePayment /> : <Navigate to="/login" />} />
@@ -155,7 +134,6 @@ function AppWrapper() {
           <Route path="/delete-account" element={<DeleteAccount />} />
           <Route path="/transfer" element={isAuthenticated ? <TransferProfile /> : <Navigate to="/login" />} />
         </Route>
-
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
