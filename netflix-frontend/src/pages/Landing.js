@@ -1,255 +1,177 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+// landing.js
+import React, { useState, useEffect } from "react";
+import heroImage from "../assets/hero-bg.jpg";
+import logo from "../assets/netflix-logo.svg";
+import "../styles/landing.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
-const trending = [
-  {
-    id: 1,
-    title: 'Ginny & Georgia',
-    image: 'https://m.media-amazon.com/images/I/81l3rZK4lnL._AC_SY679_.jpg',
-  },
-  {
-    id: 2,
-    title: 'Rhythm + Flow',
-    image: 'https://m.media-amazon.com/images/I/71rNJQ2g-EL._AC_SY679_.jpg',
-  },
-  {
-    id: 3,
-    title: 'Big Mouth',
-    image: 'https://m.media-amazon.com/images/I/81dQwQlmAXL._AC_SY679_.jpg',
-  },
-  {
-    id: 4,
-    title: 'Squid Game',
-    image: 'https://m.media-amazon.com/images/I/91z5KuonXrL._AC_SY679_.jpg',
-  },
-  {
-    id: 5,
-    title: 'You',
-    image: 'https://m.media-amazon.com/images/I/81l3rZK4lnL._AC_SY679_.jpg',
-  },
-];
-
-const reasons = [
-  {
-    title: 'Enjoy on your TV',
-    desc: 'Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.',
-    icon: '💻',
-  },
-  {
-    title: 'Download your shows to watch offline',
-    desc: 'Save your favorites easily and always have something to watch.',
-    icon: '⬇️',
-  },
-  {
-    title: 'Watch everywhere',
-    desc: 'Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.',
-    icon: '📱',
-  },
-  {
-    title: 'Create profiles for kids',
-    desc: 'Send kids on adventures with their favorite characters in a space made just for them—free with your membership.',
-    icon: '🧒',
-  },
-];
-
-const faqs = [
-  {
-    q: 'What is Netflix?',
-    a: 'Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.',
-  },
-  {
-    q: 'How much does Netflix cost?',
-    a: 'Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from $8.99 to $17.99 a month. No extra costs, no contracts.',
-  },
-  {
-    q: 'Where can I watch?',
-    a: 'Watch anywhere, anytime, on an unlimited number of devices. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device.',
-  },
-  {
-    q: 'How do I cancel?',
-    a: 'Netflix is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account anytime.',
-  },
-  {
-    q: 'What can I watch on Netflix?',
-    a: 'Netflix has an extensive library of feature films, documentaries, TV shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want.',
-  },
-  {
-    q: 'Is Netflix good for kids?',
-    a: 'The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space.',
-  },
-];
-
-export default function Landing() {
-  const [email, setEmail] = useState('');
-  const [openFaq, setOpenFaq] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
+const LandingPage = () => {
+  const [expandedFAQ, setExpandedFAQ] = useState(null);
+  const [trendingMovies, setTrendingMovies] = useState([]);
 
   useEffect(() => {
-    // Check if user is logged in
-    const user = localStorage.getItem('user');
-    setIsLoggedIn(!!user);
+    fetchTrendingMovies();
   }, []);
 
-  const handleGetStarted = (e) => {
-    e.preventDefault();
-    navigate('/register');
+  const fetchTrendingMovies = async () => {
+    try {
+      const response = await fetch(
+        "https://api.themoviedb.org/3/trending/movie/week?api_key=388623c8f0c3d1b5dcb6f4319ca08281"
+      );
+      const data = await response.json();
+      setTrendingMovies(data.results);
+    } catch (error) {
+      console.error("Failed to fetch trending movies:", error);
+    }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    navigate('/');
+  const faqs = [
+    { question: "What is Netflix?", answer: "Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more." },
+    { question: "How much does Netflix cost?", answer: "Plans range from 33 zł to 60 zł per month. No extra costs, no contracts." },
+    { question: "Where can I watch?", answer: "Watch anywhere, anytime, on an unlimited number of devices. Sign in with your Netflix account to watch instantly on the web or on your devices." },
+    { question: "How do I cancel?", answer: "Netflix is flexible. There are no pesky contracts and no commitments. You can cancel online anytime." },
+    { question: "What can I watch on Netflix?", answer: "You can watch a wide variety of TV shows, movies, documentaries, and more." },
+    { question: "Is Netflix good for kids?", answer: "The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly content." },
+  ];
+
+  const toggleFAQ = (index) => {
+    setExpandedFAQ(expandedFAQ === index ? null : index);
   };
+
+  const scrollLeft = () => {
+    document.querySelector(".trending-carousel").scrollBy({ left: -800, behavior: "smooth" });
+  };
+
+  const scrollRight = () => {
+    document.querySelector(".trending-carousel").scrollBy({ left: 800, behavior: "smooth" });
+  };
+
+  const renderEmailForm = () => (
+    <>
+      <p>Ready to watch? Enter your email to create or restart your membership.</p>
+      <div className="email-form" role="form" aria-label="Email signup form">
+        <input type="email" placeholder="Email address" aria-label="Email address" />
+        <button>Get Started</button>
+      </div>
+    </>
+  );
 
   return (
-    <div
-      className="relative min-h-screen flex flex-col bg-black"
-      style={{
-        backgroundImage: 'url(https://assets.nflxext.com/ffe/siteui/vlv3/7e1e5c7e-2b7d-4b3e-8e7e-2c2e7e7e7e7e/7e1e5c7e-2b7d-4b3e-8e7e-2c2e7e7e7e7e_PL-en-20230731-popsignuptwoweeks-perspective_alpha_website_large.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      {/* Black overlay */}
-      <div className="absolute inset-0 bg-black opacity-80"></div>
-      {/* Red glow at the bottom */}
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 w-full h-40 z-20"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(229,9,20,0.6) 0%, rgba(0,0,0,0) 80%)',
-        }}
-      ></div>
-      <header className="relative z-30 flex justify-between items-center px-8 py-6">
-        <span className="text-3xl font-bold text-red-600">NETFLIX</span>
-        <div className="flex items-center gap-4">
-          <select
-            className="bg-transparent border border-gray-500 text-white px-2 py-1 rounded text-sm"
-            defaultValue="en"
-            aria-label="Select language"
-          >
+    <div className="landing-page">
+      {/* HERO SECTION */}
+      <div className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
+        <div className="overlay"></div>
+        <header>
+          <img src={logo} alt="Netflix Logo" className="logo" />
+          <div className="header-right">
+            <select className="language-select" aria-label="Select language">
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+            </select>
+            <button className="sign-in">Sign In</button>
+          </div>
+        </header>
+        <div className="hero-content">
+          <h1>Unlimited movies, TV shows, and more</h1>
+          <p>Start at $3.99. Cancel anytime.</p>
+          {renderEmailForm()}
+        </div>
+      </div>
+
+      {/* TRENDING NOW */}
+      <section className="trending-now">
+  <div className="container">
+    <h2>Trending Now</h2>
+    <div className="trending-carousel-wrapper">
+      <button className="carousel-arrow left" onClick={scrollLeft} aria-label="Scroll left">{"<"}</button>
+      <div className="trending-carousel">
+        <div className="trending-carousel-inner">
+          {trendingMovies.slice(0, 10).map((movie, index) => (
+            <div key={movie.id} className="trending-card" title={movie.title}>
+              <div className="rank-number">{index + 1}</div>
+              <div className="netflix-badge">N</div>
+              <img
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://via.placeholder.com/300x450?text=No+Image"}
+                alt={movie.title}
+              />
+              <p>{movie.title}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <button className="carousel-arrow right" onClick={scrollRight} aria-label="Scroll right">{">"}</button>
+    </div>
+  </div>
+</section>
+
+
+      {/* REASONS TO JOIN */}
+      <section className="section">
+        <h2>More Reasons to Join Us</h2>
+        <div className="reasons-grid">
+          <div className="reason-card"><div className="icon"><i className="fas fa-tv"></i></div><h3>Enjoy on your TV</h3><p>Watch on Smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.</p></div>
+          <div className="reason-card"><div className="icon"><i className="fas fa-download"></i></div><h3>Download your shows to watch offline</h3><p>Save your favorites easily and always have something to watch.</p></div>
+          <div className="reason-card"><div className="icon"><i className="fas fa-globe"></i></div><h3>Watch everywhere</h3><p>Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.</p></div>
+          <div className="reason-card"><div className="icon"><i className="fas fa-child"></i></div><h3>Create profiles for kids</h3><p>Send kids on adventures with their favorite characters in a space made just for them - free with your membership.</p></div>
+        </div>
+      </section>
+
+      {/* FAQ SECTION */}
+      <section className="faq">
+        <h2>Frequently Asked Questions</h2>
+        {faqs.map((item, index) => (
+          <div key={index} className={`faq-item ${expandedFAQ === index ? "expanded" : ""}`}>
+            <button className="faq-question" onClick={() => toggleFAQ(index)} aria-expanded={expandedFAQ === index}>
+              {item.question}
+              <span>{expandedFAQ === index ? "−" : "+"}</span>
+            </button>
+            <div className="faq-answer"><p>{item.answer}</p></div>
+          </div>
+        ))}
+        <div className="get-started-bottom">{renderEmailForm()}</div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <div className="footer-columns">
+          <div className="footer-column">
+            <a href="/">FAQ</a>
+            <a href="/">Investor Relations</a>
+            <a href="/">Ways to Watch</a>
+            <a href="/">Corporate Information</a>
+            <a href="/">Legal Notices</a>
+          </div>
+          <div className="footer-column">
+            <a href="/">Help Center</a>
+            <a href="/">Jobs</a>
+            <a href="/">Terms of Use</a>
+            <a href="/">Contact Us</a>
+          </div>
+          <div className="footer-column">
+            <a href="/">Privacy</a>
+            <a href="/">Speed Test</a>
+            <a href="/">Account</a>
+            <a href="/">Redeem Gift Cards</a>
+          </div>
+          <div className="footer-column">
+            <a href="/">Media Center</a>
+            <a href="/">Buy Gift Cards</a>
+            <a href="/">Cookie Preferences</a>
+            <a href="/">Legal Guarantee</a>
+          </div>
+        </div>
+        <div className="footer-lang">
+          <select aria-label="Select language">
             <option value="en">English</option>
-            <option value="pl">Polski</option>
+            <option value="fr">Français</option>
           </select>
-          {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 text-white px-4 py-2 rounded font-semibold hover:bg-red-700 uppercase text-sm tracking-wider"
-            >
-              Logout
-            </button>
-          ) : (
-            <Link
-              to="/login"
-              className="bg-red-600 text-white px-4 py-2 rounded font-semibold hover:bg-red-700 uppercase text-sm tracking-wider"
-            >
-              Sign In
-            </Link>
-          )}
-        </div>
-      </header>
-      <main className="relative z-30 flex flex-col items-center justify-center flex-1 text-center px-4 min-h-[70vh]">
-        <div className="w-full max-w-5xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
-            Unlimited movies, TV shows, and more
-          </h1>
-          <h2 className="text-2xl text-white mb-4">Starts at 33 zł. Cancel anytime.</h2>
-          <p className="text-white mb-6">
-            Ready to watch? Enter your email to create or restart your membership.
-          </p>
-          <form
-            onSubmit={handleGetStarted}
-            className="flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xl mx-auto mb-12"
-          >
-            <input
-              type="email"
-              placeholder="Email address"
-              className="px-4 py-3 rounded w-full md:w-2/3 bg-gray-900 bg-opacity-80 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-600"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-            />
-            <button
-              type="submit"
-              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded font-semibold text-lg"
-            >
-              Get Started &gt;
-            </button>
-          </form>
-        </div>
-
-        {/* Trending Now */}
-        <section className="w-full max-w-5xl mx-auto mb-12">
-          <h2 className="text-2xl text-white font-bold mb-4 text-left">Trending Now</h2>
-          <div className="flex gap-6 overflow-x-auto pb-4">
-            {trending.map((movie, idx) => (
-              <div key={movie.id} className="flex-shrink-0 w-40 relative group">
-                <img
-                  src={movie.image}
-                  alt={movie.title}
-                  className="rounded-lg shadow-lg w-full h-56 object-cover group-hover:scale-105 transition-transform"
-                />
-                <span className="absolute top-2 left-2 bg-black bg-opacity-70 text-white text-2xl font-bold px-2 rounded">
-                  {idx + 1}
-                </span>
-                <h3 className="text-white mt-2 text-base font-semibold">{movie.title}</h3>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* More Reasons to Join */}
-        <section className="w-full max-w-5xl mx-auto mb-12">
-          <h2 className="text-2xl text-white font-bold mb-4 text-left">More Reasons to Join</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {reasons.map(reason => (
-              <div
-                key={reason.title}
-                className="bg-[#181824] rounded-lg p-6 text-left text-white flex flex-col items-start shadow-md"
-              >
-                <div className="text-3xl mb-2">{reason.icon}</div>
-                <h4 className="font-bold mb-2">{reason.title}</h4>
-                <p className="text-sm">{reason.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="w-full max-w-5xl mx-auto mb-12">
-          <h2 className="text-2xl text-white font-bold mb-4 text-left">Frequently Asked Questions</h2>
-          <div>
-            {faqs.map((faq, idx) => (
-              <div key={faq.q} className="mb-2">
-                <button
-                  className="w-full flex justify-between items-center bg-[#222] text-white text-left px-6 py-4 rounded mb-1 font-semibold focus:outline-none"
-                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                >
-                  {faq.q}
-                  <span className="text-2xl">{openFaq === idx ? '-' : '+'}</span>
-                </button>
-                {openFaq === idx && (
-                  <div className="bg-[#181824] text-white px-6 py-4 rounded-b mb-1 text-left">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      </main>
-      {/* Footer */}
-      <footer className="relative z-30 w-full bg-black bg-opacity-80 text-gray-400 text-sm py-8 mt-auto">
-        <div className="max-w-5xl mx-auto px-4">
-          <p className="mb-4">Questions? Call 1-800-000-0000</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <a href="#" className="hover:underline">FAQ</a>
-            <a href="#" className="hover:underline">Help Center</a>
-            <a href="#" className="hover:underline">Terms of Use</a>
-            <a href="#" className="hover:underline">Privacy</a>
+          <div className="recaptcha-note">
+            This page is protected by Google reCAPTCHA to ensure you're not a bot.
           </div>
         </div>
       </footer>
     </div>
   );
-}
+};
+
+export default LandingPage;
